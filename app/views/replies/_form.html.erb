@@ -1,0 +1,7 @@
+<div>  
+  <%= form_for [ comment.post, comment, comment.replies.build ] do |form| %>
+    <p>replier<%= form.text_field :name %></p>
+     <p>Reply<%= form.text_field :body%></p>
+      <%= form.submit %>
+  <% end %>
+</div>  

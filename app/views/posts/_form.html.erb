@@ -1,0 +1,21 @@
+<div>
+  <%= form_for @post do |form| %>
+    <div>
+      <%#= form.hidden_field :user_id, value: current_user.id%> 
+    </div>
+
+    <div >
+      <%= form.label :name %><br>
+      <%= form.text_field :name %>
+    </div>
+
+    <div >
+      <%= form.label :body %><br>
+      <%= form.text_area :body %>
+    </div>
+
+    <div>
+      <%= form.submit "Create-post" %>
+    </div><hr>
+  <% end %>
+</div>  

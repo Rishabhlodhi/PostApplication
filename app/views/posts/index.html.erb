@@ -1,0 +1,56 @@
+  <h4 align="center">Welcome to the post Application</h4>
+    <%if user_signed_in? %>
+      <h5>
+        Log-In, <%= current_user.email %>
+        <%= link_to('Logout', destroy_user_session_path, :method => :delete) %>   
+      </h5>
+    <%end%>
+    <hr>
+
+  <div align="center">  
+    <h2>Create Post here </h2>
+    <%=render partial: "form"%>
+  </div>
+
+    <div>
+      <% @posts.reverse.each do |post| %>
+        <h3>Your Post is Here</h3>
+        <div>
+         <div>
+            <p><%= post.name %></p>
+            <p><%=post.body %></p><br><br>
+              <% if post.user_id == current_user.id || current_user.role == 'admin'%>
+                <%= link_to "Edit", edit_post_path(post) %>
+                <%= link_to "Delete", post_path(post),method: :delete,data: { confirm: "Are  you sure?" } %><br>
+              <%end%>
+         </div> 
+        </div>
+
+      <%= render partial: "comments/form", locals: {post: post}%>
+          <% post.comments.order(created_at: :desc).each do |comment| %>
+              <strong>commenter-><%= comment.name %> </strong>
+                <p>commnet-><%= comment.body %> </p><br>
+                <% if comment.user_id == current_user.id || current_user.role =='admin'%>
+                  <%= link_to "Edit", edit_post_comment_path(post,comment) %>
+                  <%= link_to 'Delete', [comment.post, comment],
+                method: :delete,
+                data: { confirm: "Are you sure?" } %>
+               <%end%>  
+            
+
+
+      <%= render partial: "replies/form", locals: {comment: comment} if comment.id%>
+           <% comment.replies.reverse.each do |reply| %>
+             <%if reply.id%>
+              <strong> replier><%= reply.name %> </strong>
+                <p>Reply-><%= reply.body %> </p><br>
+                  <%= link_to "Edit", edit_post_comment_reply_path(post, comment, reply) %>
+                    <%= link_to 'Delete', [comment.post,reply.comment, reply],
+                       method: :delete,
+                       data: { confirm: "Are you sure?" } %>
+               <% end %><br> <br>
+          <% end %>
+      <% end %><hr>
+  <% end %>
+     
+
